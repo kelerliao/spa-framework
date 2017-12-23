@@ -2,7 +2,7 @@
  * @fileOverview util 相关处理方法
  * @author: kelerliao
  */
-import core             from '../core';
+import core from '../core';
 
 export default {
     /**
@@ -24,7 +24,7 @@ export default {
 
         pairs = String(params).replace('?', '').replace('#', '').split('&');
 
-        pairs.forEach(function(keyVal) {
+        pairs.forEach(function (keyVal) {
             pair = keyVal.split('=');
             key = pair[0];
             value = pair.slice(1).join('=');
@@ -101,15 +101,23 @@ export default {
      * @param {Element} element 要获取的元素
      * @return {{x: number, y: number}}
      */
-    getPosition: function(element) {
+    getPosition: function (element) {
         let xPosition = 0;
         let yPosition = 0;
 
-        while(element) {
+        while (element) {
+            // Fix Bug: chrome 62 和 IE11 下 body.scrollTop 始终为 0，但 document.documentElement.scrollTop 是对的
+            if (element.nodeName === 'BODY') {
+                element = element.scrollTop > 0 ? element : document.documentElement;
+            }
+
             xPosition += (element.offsetLeft - element.scrollLeft + element.clientLeft);
             yPosition += (element.offsetTop - element.scrollTop + element.clientTop);
+            // console.log(element.offsetTop, element.scrollTop,element.clientTop, element.nodeName);
+
             element = element.offsetParent;
         }
+        // console.log('   ');
         return { x: xPosition, y: yPosition };
     }
 };

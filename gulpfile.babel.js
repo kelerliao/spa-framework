@@ -2,10 +2,19 @@
 
 import gulp          from 'gulp';
 import del           from 'del';
-import { spawn }     from 'child_process';
+import {spawn}     from 'child_process';
 import requireDir    from 'require-dir';
+import BrowserSync   from 'browser-sync';
+
+const browserSync = BrowserSync.create();
 
 requireDir('./gulp-task');
+
+gulp.task('serve', () => {
+    browserSync.init({
+        server: "./development/"
+    });
+});
 
 /*
  * clean handler
@@ -13,7 +22,7 @@ requireDir('./gulp-task');
  **/
 gulp.task('clean', cb => {
     console.log('clean run...');
-    return del(['development/*','!development/img', 'production/*','!production/img'], cb);
+    return del(['development/*', '!development/img', 'production/*', '!production/img'], cb);
 });
 
 /*
@@ -22,19 +31,22 @@ gulp.task('clean', cb => {
 gulp.task('watch', () => {
     // Watch html files
     gulp.watch(['src/app.html'], ['html']);
-
+    
     // Watch .css files
-    gulp.watch('src/css/*.css', ['styles']);
-
+    gulp.watch('src/css/*.scss', ['styles']);
+    
     // Watch .js files
     gulp.watch(['src/js/**/*.js'], ['scripts']);
+    
+    // Watch development folder
+    gulp.watch('development/**').on('change', browserSync.reload);
 });
 
 
 // default = development & production
 gulp.task('default', ['clean'], () => {
     console.log('default run...');
-    gulp.start('html', 'styles', 'scripts', 'watch');
+    gulp.start('html', 'styles', 'scripts', 'watch', 'serve');
 });
 
 /*
@@ -47,7 +59,7 @@ gulp.task('auto-restart', () => {
             childProcess && childProcess.kill();
             childProcess = spawn(cmd, ['default'], {stdio: 'inherit'});
         };
-
+    
     gulp.watch(['gulpfile.babel.js', './gulp-task/*.js'], restart);
     restart();
 });

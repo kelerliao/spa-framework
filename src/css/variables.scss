@@ -1,0 +1,21 @@
+/*
+* 公共变量
+  ========================================================================== */
+// 把 pt 换算为 px （16pt=22px）
+$ptToPx: 0.01375rem;
+
+$headerH: 0.64rem;
+$headerMenuFontSize: 14 * $ptToPx;
+$pagePaddingLR: 16%;
+$aHoverOpacity: 0.6;
+$aColorBlue: #6A81FF;
+$aHoverColorBlue: #8CA3FF;
+
+$fontSize150: 150%;
+
+$banner0TitleFontSize: 64 * $ptToPx;
+$banner0DescFontSize: 16 * $ptToPx;
+$banner0DescLineHeight: 0.34rem;
+$banner0NumberFontSize: 22 * $ptToPx;
+
+$footerFontSize: 14 * $ptToPx;

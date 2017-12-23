@@ -2723,10 +2723,18 @@ exports.default = {
         var yPosition = 0;
 
         while (element) {
+            // Fix Bug: chrome 62 和 IE11 下 body.scrollTop 始终为 0，但 document.documentElement.scrollTop 是对的
+            if (element.nodeName === 'BODY') {
+                element = element.scrollTop > 0 ? element : document.documentElement;
+            }
+
             xPosition += element.offsetLeft - element.scrollLeft + element.clientLeft;
             yPosition += element.offsetTop - element.scrollTop + element.clientTop;
+            // console.log(element.offsetTop, element.scrollTop,element.clientTop, element.nodeName);
+
             element = element.offsetParent;
         }
+        // console.log('   ');
         return { x: xPosition, y: yPosition };
     }
 }; /**
